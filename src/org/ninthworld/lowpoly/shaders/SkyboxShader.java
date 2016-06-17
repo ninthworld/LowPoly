@@ -9,8 +9,8 @@ import org.ninthworld.lowpoly.helper.MatrixHelper;
  */
 public class SkyboxShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "shaders/skybox/skybox.vs";
-    private static final String FRAGMENT_FILE = "shaders/skybox/skybox.fs";
+    private static final String VERTEX_FILE = "/shaders/skybox/skybox.vs";
+    private static final String FRAGMENT_FILE = "/shaders/skybox/skybox.fs";
 
     private int location_projectionMatrix;
     private int location_viewMatrix;

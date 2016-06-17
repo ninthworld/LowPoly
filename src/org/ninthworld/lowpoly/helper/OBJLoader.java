@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class OBJLoader {
 
-    public static RawModel loadOBJ(Loader loader, File file, Vector3f[] colorList) throws IOException {
+    public static RawModel loadOBJ(Loader loader, InputStream file, Vector3f[] colorList) throws IOException {
         List<Float> verticesList = new ArrayList<>();
         List<Float> normalsList = new ArrayList<>();
         List<int[][]> indicesList = new ArrayList<>();
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new InputStreamReader(file));
         String line;
         int fCount = -1;
         boolean onF = false;

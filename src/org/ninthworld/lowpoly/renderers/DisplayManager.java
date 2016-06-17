@@ -14,7 +14,7 @@ public class DisplayManager {
     private static final int        HEIGHT  = 720;
     private static final int        FPS_CAP = 60;
     private static final boolean    VSYNC   = true;
-    private static final String     TITLE   = "Simple Geometry";
+    private static final String     TITLE   = "LowPoly";
 
     public static void createDisplay(){
         try {

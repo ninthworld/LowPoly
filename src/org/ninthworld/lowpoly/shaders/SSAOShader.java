@@ -1,4 +1,4 @@
-package org.ninthworld.lowpoly.postProcessing;
+package org.ninthworld.lowpoly.shaders;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
@@ -6,8 +6,8 @@ import org.ninthworld.lowpoly.shaders.ShaderProgram;
 
 public class SSAOShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "shaders/postprocessing/ssao.vs";
-	private static final String FRAGMENT_FILE = "shaders/postprocessing/ssao.fs";
+	private static final String VERTEX_FILE = "/shaders/postprocessing/ssao.vs";
+	private static final String FRAGMENT_FILE = "/shaders/postprocessing/ssao.fs";
 
 	private int location_colorTexture;
 	private int location_depthTexture;

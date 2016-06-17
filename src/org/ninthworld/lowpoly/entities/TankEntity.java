@@ -67,7 +67,7 @@ public class TankEntity extends Entity {
             }
         }
         height /= (float) Math.pow(radius*2 + 1, 2);
-        getPosition().setY(height);
+        getPosition().setY(height - 1f);
 
         Vector3f vec1 = new Vector3f(getPosition().x + 2, terrain.getHeight(getPosition().x + 2, getPosition().z + 2), getPosition().z + 2);
         Vector3f vec2 = new Vector3f(getPosition().x - 2, terrain.getHeight(getPosition().x - 2, getPosition().z + 2), getPosition().z + 2);

@@ -1,8 +1,6 @@
 package org.ninthworld.lowpoly.shaders;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -20,9 +18,9 @@ public abstract class ShaderProgram {
 
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-    public ShaderProgram(String vertexFile,String fragmentFile){
-        vertexShaderID = loadShader(vertexFile,GL20.GL_VERTEX_SHADER);
-        fragmentShaderID = loadShader(fragmentFile,GL20.GL_FRAGMENT_SHADER);
+    public ShaderProgram(String vertexFile, String fragmentFile){
+        vertexShaderID = loadShader(getClass().getResourceAsStream(vertexFile), GL20.GL_VERTEX_SHADER);
+        fragmentShaderID = loadShader(getClass().getResourceAsStream(fragmentFile), GL20.GL_FRAGMENT_SHADER);
         programID = GL20.glCreateProgram();
         GL20.glAttachShader(programID, vertexShaderID);
         GL20.glAttachShader(programID, fragmentShaderID);
@@ -91,16 +89,16 @@ public abstract class ShaderProgram {
         GL20.glUniformMatrix4(location, false, matrixBuffer);
     }
 
-    private static int loadShader(String file, int type){
+    private static int loadShader(InputStream file, int type){
         StringBuilder shaderSource = new StringBuilder();
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             String line;
             while((line = reader.readLine())!=null){
                 shaderSource.append(line).append("//\n");
             }
             reader.close();
-        }catch(IOException e){
+        } catch(IOException e){
             e.printStackTrace();
             System.exit(-1);
         }

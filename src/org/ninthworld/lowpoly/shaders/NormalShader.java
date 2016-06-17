@@ -10,8 +10,8 @@ import org.ninthworld.lowpoly.lights.Light;
  */
 public class NormalShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "shaders/normal/normal.vs";
-    private static final String FRAGMENT_FILE = "shaders/normal/normal.fs";
+    private static final String VERTEX_FILE = "/shaders/normal/normal.vs";
+    private static final String FRAGMENT_FILE = "/shaders/normal/normal.fs";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;

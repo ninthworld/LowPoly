@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
+import org.ninthworld.lowpoly.shaders.SSAOShader;
 
 /**
  * Created by NinthWorld on 6/7/2016.

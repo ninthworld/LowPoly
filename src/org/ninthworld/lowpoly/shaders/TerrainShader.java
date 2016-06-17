@@ -11,8 +11,8 @@ import org.ninthworld.lowpoly.shaders.ShaderProgram;
  */
 public class TerrainShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "shaders/terrain/terrain.vs";
-    private static final String FRAGMENT_FILE = "shaders/terrain/terrain.fs";
+    private static final String VERTEX_FILE = "/shaders/terrain/terrain.vs";
+    private static final String FRAGMENT_FILE = "/shaders/terrain/terrain.fs";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;

@@ -1,4 +1,4 @@
-package org.ninthworld.lowpoly.guis;
+package org.ninthworld.lowpoly.shaders;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.ninthworld.lowpoly.shaders.ShaderProgram;
@@ -8,8 +8,8 @@ import org.ninthworld.lowpoly.shaders.ShaderProgram;
  */
 public class GuiShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "shaders/gui/gui.vs";
-    private static final String FRAGMENT_FILE = "shaders/gui/gui.fs";
+    private static final String VERTEX_FILE = "/shaders/gui/gui.vs";
+    private static final String FRAGMENT_FILE = "/shaders/gui/gui.fs";
 
     private int location_transformationMatrix;
 

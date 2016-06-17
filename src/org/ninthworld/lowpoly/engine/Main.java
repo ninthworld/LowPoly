@@ -21,7 +21,9 @@ import org.ninthworld.lowpoly.terrain.ChunkEntity;
 import org.ninthworld.lowpoly.terrain.Terrain;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,25 +35,67 @@ import java.util.Map;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    private Loader loader;
 
+    private MasterRenderer masterRenderer;
+    private Light light;
+    private Camera camera;
+
+    private Fbo normalFbo;
+    private Fbo skyboxFbo;
+    private Fbo multisampleFbo;
+    private Fbo outputFbo;
+
+    private Map<String, RawModel> rawModels;
+    private Map<RawModel, List<Entity>> entities;
+
+    private Terrain terrain;
+
+    private TankEntity tankEntity;
+
+    public Main(){
         DisplayManager.createDisplay();
-        Loader loader = new Loader();
+        loader = new Loader();
 
-        Map<String, RawModel> rawModels = new HashMap<>();
-        rawModels.put("pineTree", OBJLoader.loadOBJ(loader, new File("models/pinetree.obj"), new Vector3f[]{new Vector3f(61/255f, 40/255f, 9/255f), new Vector3f(76/255f, 110/255f, 33/255f)}));
-        rawModels.put("grass", OBJLoader.loadOBJ(loader, new File("models/grass.obj"), new Vector3f[]{new Vector3f(112/255f, 161/255f, 49/255f)}));
+        light = new Light(new Vector3f(10000, 7000, 14000), new Vector3f(1, 1, 1));
+        camera = new Camera(new Vector3f(0, 5, 10));
+        masterRenderer = new MasterRenderer(loader, camera);
 
-        rawModels.put("tankHead", OBJLoader.loadOBJ(loader, new File("models/tankHead.obj"), new Vector3f[]{new Vector3f(140/255f, 115/255f, 52/255f), new Vector3f(120/255f, 95/255f, 32/255f)}));
-        rawModels.put("tankBody", OBJLoader.loadOBJ(loader, new File("models/tankBody.obj"), new Vector3f[]{new Vector3f(140/255f, 115/255f, 52/255f), new Vector3f(92/255f, 85/255f, 59/255f), new Vector3f(92/255f, 85/255f, 59/255f)}));
+        rawModels = new HashMap<>();
+        try {
+            loadModels();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Vector3f tankPos = new Vector3f(0, 0, 0);
-        Vector3f tankRot = new Vector3f(0, 0, 0);
-        Entity tankHead = new Entity(rawModels.get("tankHead"), tankPos, tankRot.x, tankRot.y, tankRot.z, 2f);
-        Entity tankBody = new Entity(rawModels.get("tankBody"), tankPos, tankRot.x, tankRot.y, tankRot.z, 2f);
+        terrain = new Terrain(loader, rawModels);
+        entities = new HashMap<>();
 
-        Terrain terrain = new Terrain(loader, rawModels);
-        Map<RawModel, List<Entity>> entities = new HashMap<>();
+        normalFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
+        skyboxFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
+        multisampleFbo = new Fbo(Display.getWidth(), Display.getHeight());
+        outputFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
+        PostProcessing.init(loader);
+
+        setup();
+    }
+
+    private void loadModels() throws IOException {
+        InputStream pinetreeModel = getClass().getResourceAsStream("/models/pinetree.obj");
+        InputStream grassModel = getClass().getResourceAsStream("/models/grass.obj");
+        InputStream tankHeadModel = getClass().getResourceAsStream("/models/tankHead.obj");
+        InputStream tankBodyModel = getClass().getResourceAsStream("/models/tankBody.obj");
+
+        rawModels.put("pineTree", OBJLoader.loadOBJ(loader, pinetreeModel, new Vector3f[]{new Vector3f(61/255f, 40/255f, 9/255f), new Vector3f(76/255f, 110/255f, 33/255f)}));
+        rawModels.put("grass", OBJLoader.loadOBJ(loader, grassModel, new Vector3f[]{new Vector3f(112/255f, 161/255f, 49/255f)}));
+        rawModels.put("tankHead", OBJLoader.loadOBJ(loader, tankHeadModel, new Vector3f[]{new Vector3f(140/255f, 115/255f, 52/255f), new Vector3f(120/255f, 95/255f, 32/255f)}));
+        rawModels.put("tankBody", OBJLoader.loadOBJ(loader, tankBodyModel, new Vector3f[]{new Vector3f(140/255f, 115/255f, 52/255f), new Vector3f(92/255f, 85/255f, 59/255f), new Vector3f(92/255f, 85/255f, 59/255f)}));
+
+    }
+
+    private void setup(){
+        Entity tankHead = new Entity(rawModels.get("tankHead"), new Vector3f(0, 0, 0), 0, 0, 0, 2f);
+        Entity tankBody = new Entity(rawModels.get("tankBody"), new Vector3f(0, 0, 0), 0, 0, 0, 2f);
 
         List<Entity> tankHeadEntities = new ArrayList<>();
         tankHeadEntities.add(tankHead);
@@ -62,21 +106,13 @@ public class Main {
         entities.put(rawModels.get("tankHead"), tankHeadEntities);
         entities.put(rawModels.get("tankBody"), tankBodyEntities);
 
-        TankEntity tankEntity = new TankEntity(tankHead, tankBody, new Vector3f(0, 0, 0), 0, 0, 0, 1f);
+        tankEntity = new TankEntity(tankHead, tankBody, new Vector3f(0, 0, 0), 0, 0, 0, 1f);
 
-        Light light = new Light(new Vector3f(10000, 7000, 14000), new Vector3f(1, 1, 1));
-        Camera camera = new Camera(new Vector3f(0, 5, 10));
+        loop();
+    }
 
-        Fbo normalFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
-        Fbo skyboxFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
-        Fbo multisampleFbo = new Fbo(Display.getWidth(), Display.getHeight());
-        Fbo outputFbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_TEXTURE);
-        PostProcessing.init(loader);
-
-        MasterRenderer masterRenderer = new MasterRenderer(loader, camera);
-
+    private void loop(){
         while(!Display.isCloseRequested()){
-
             tankEntity.move(terrain, camera);
             // camera.move();
 
@@ -101,15 +137,21 @@ public class Main {
             DisplayManager.updateDisplay();
         }
 
+        cleanUp();
+    }
+
+    private void cleanUp(){
         skyboxFbo.cleanUp();
         normalFbo.cleanUp();
         multisampleFbo.cleanUp();
         outputFbo.cleanUp();
         PostProcessing.cleanUp();
-
         masterRenderer.cleanUp();
-
         loader.cleanUp();
         DisplayManager.closeDisplay();
+    }
+
+    public static void main(String[] args){
+        new Main();
     }
 }

@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.ninthworld.lowpoly.helper.MatrixHelper;
 import org.ninthworld.lowpoly.models.RawModel;
 import org.ninthworld.lowpoly.renderers.Loader;
+import org.ninthworld.lowpoly.shaders.GuiShader;
 
 import java.util.List;
 
