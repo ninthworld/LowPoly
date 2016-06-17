@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LowPoly:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LowPoly_jar</output-path>
+    <root id="archive" name="LowPoly.jar">
+      <element id="module-output" name="LowPoly" />
+      <element id="dir-copy" path="$PROJECT_DIR$/res" />
+    </root>
+  </artifact>
+</component>

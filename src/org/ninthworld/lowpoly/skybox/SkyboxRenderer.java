@@ -60,7 +60,7 @@ public class SkyboxRenderer {
             SIZE, -SIZE,  SIZE
     };
 
-    private static String[] TEXTURE_FILES = {"res/skybox/right.png", "res/skybox/left.png", "res/skybox/top.png", "res/skybox/bottom.png", "res/skybox/back.png", "res/skybox/front.png"};
+    private static String[] TEXTURE_FILES = {"/skybox/right.png", "/skybox/left.png", "/skybox/top.png", "/skybox/bottom.png", "/skybox/back.png", "/skybox/front.png"};
 
     private RawModel cube;
     private int texture;

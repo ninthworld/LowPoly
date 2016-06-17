@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: . lib/lwjgl.jar lib/lwjgl_util.jar lib/PNGDecoder.jar lib/
+ slick.jar
+Main-Class: org.ninthworld.lowpoly.engine.Main
+

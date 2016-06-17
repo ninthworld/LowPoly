@@ -8,6 +8,7 @@ import org.ninthworld.lowpoly.models.RawModel;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -46,7 +47,7 @@ public class Loader {
         GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, textureID);
 
         for(int i=0; i<textureFiles.length; i++){
-            TextureData data = decodeTextureFile(new File(textureFiles[i]));
+            TextureData data = decodeTextureFile(getClass().getResourceAsStream(textureFiles[i]));
             GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
         }
 
@@ -56,19 +57,18 @@ public class Loader {
         return textureID;
     }
 
-    private TextureData decodeTextureFile(File file) {
+    private TextureData decodeTextureFile(InputStream file) {
         int width = 0;
         int height = 0;
         ByteBuffer buffer = null;
         try {
-            FileInputStream in = new FileInputStream(file);
-            PNGDecoder decoder = new PNGDecoder(in);
+            PNGDecoder decoder = new PNGDecoder(file);
             width = decoder.getWidth();
             height = decoder.getHeight();
             buffer = ByteBuffer.allocateDirect(4 * width * height);
             decoder.decode(buffer, width * 4, PNGDecoder.Format.RGBA);
             buffer.flip();
-            in.close();
+            file.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
