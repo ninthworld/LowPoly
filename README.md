@@ -5,5 +5,5 @@ The rendering engine uses VAOs and VBOs which are loaded into the shaders along 
 
 The engine includes shadow mapping, a simple ssao effect, and simple lighting.
 
+![GIF](https://thumbs.gfycat.com/SecondTartAlaskankleekai-size_restricted.gif)
 ![In-Game Screenshot](https://github.com/ninthworld/LowPoly/blob/master/screenshots/screenshot1.png)
-![GIF](https://giant.gfycat.com/SecondTartAlaskankleekai.gif)
